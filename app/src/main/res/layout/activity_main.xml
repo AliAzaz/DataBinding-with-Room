@@ -5,7 +5,6 @@
     tools:context="com.example.ali.roomapplication.ui.MainActivity">
 
     <data>
-
         <import type="android.view.View" />
 
         <variable
@@ -92,6 +91,20 @@
                 android:onClick="@{() -> callback.SaveDT()}"
                 android:text="SAVE"
                 android:textColor="@android:color/white" />
+
+            <Button
+                android:id="@+id/btn_delete"
+                android:layout_width="0dp"
+                android:layout_weight="45"
+                android:layout_marginLeft="5dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@color/colorAccent"
+                android:onClick="@{() -> callback.DeleteDT()}"
+                android:text="Delete"
+                android:visibility="@{data != null ? View.VISIBLE : View.GONE}"
+                android:textColor="@android:color/white" />
+
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView

@@ -14,16 +14,25 @@ public class DirectoryModel {
 
     @PrimaryKey(autoGenerate = true)
     public int _id;
+    public String contactNo;
 
     @ColumnInfo
     public String name;
     public String email;
-    public String contactNo;
 
     public DirectoryModel(String name, String email, String contactNo) {
         this.name = name;
         this.email = email;
         this.contactNo = contactNo;
+    }
+
+
+    @Ignore /*Use Ignore here cause compiler couldn't recognizing which constructor it'll have to use during compiling */
+    public DirectoryModel(DirectoryModel dm) {
+        this._id = dm.get_id();
+        this.name = dm.getName();
+        this.email = dm.getEmail();
+        this.contactNo = dm.getContactNo();
     }
 
     @Ignore /*Use Ignore here cause compiler couldn't recognizing which constructor it'll have to use during compiling */
@@ -32,6 +41,10 @@ public class DirectoryModel {
         this.name = name;
         this.email = email;
         this.contactNo = contactNo;
+    }
+
+    public int get_id() {
+        return _id;
     }
 
     public String getName() {

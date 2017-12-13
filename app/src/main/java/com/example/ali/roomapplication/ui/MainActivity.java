@@ -26,8 +26,10 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getName();
     ActivityMainBinding binding;
     dbClass db;
-    int position;
+    String email;
     Boolean flagRecord = true;
+
+    DirectoryModel selectData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,32 +47,45 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void SaveDT() {
-        if (formValidation()) {
-            try {
-                if (flagRecord) {
-                    new CrudOperation(getBaseContext(), "save").execute();
-                } else {
-                    new CrudOperation(getBaseContext(), "update").execute();
-                }
-            } catch (Exception ex) {
-                Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
     private void clearFields() {
         binding.txtName.setText(null);
         binding.txtEmail.setText(null);
         binding.txtContact.setText(null);
     }
 
+    //    Save button click
+    public void SaveDT() {
+        if (formValidation()) {
+            try {
+                if (flagRecord) {
+                    if(!new CrudOperation(this, "save").execute().get()){
+                        binding.txtEmail.setError("Already Exist");
+                        Toast.makeText(this, "Email already exist!!", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    new CrudOperation(this, "update").execute();
+                }
+            } catch (Exception ex) {
+                Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    //    Clear button click
     public void ClearDT() {
+
         clearFields();
 
-        flagRecord = true;
+        binding.btnDelete.setVisibility(View.GONE);
+        binding.btnClear.setVisibility(View.GONE);
+    }
+
+    //    Delete button click
+    public void DeleteDT() {
+        new CrudOperation(this, "delete").execute();
 
         binding.btnClear.setVisibility(View.GONE);
+        binding.btnDelete.setVisibility(View.GONE);
     }
 
     public Boolean formValidation() {
@@ -143,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private class CrudOperation extends AsyncTask<Void, Void, Void> {
+    private class CrudOperation extends AsyncTask<Void, Boolean, Boolean> {
 
         Context mContext;
         String operation = "";
@@ -161,31 +176,43 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        protected Void doInBackground(Void... voids) {
+        protected Boolean doInBackground(Void... voids) {
 
             if (operation.equals("save")) {
-                db.daoAccess().insertNewDirectory(new DirectoryModel(binding.txtName.getText().toString()
+                if (!db.daoAccess().checkContactExist(binding.txtEmail.getText().toString())) {
+                    db.daoAccess().insertNewDirectory(new DirectoryModel(binding.txtName.getText().toString()
+                            , binding.txtEmail.getText().toString(),
+                            binding.txtContact.getText().toString()));
+                }else {
+                    return false;
+                }
+            } else if (operation.equals("getspecificdata")) {
+                selectData = new DirectoryModel(db.daoAccess().getSpecificData(email));
+                binding.setData(selectData);
+            } else if (operation.equals("update")) {
+                db.daoAccess().updateNewDirectory(new DirectoryModel(selectData.get_id(), binding.txtName.getText().toString()
                         , binding.txtEmail.getText().toString(),
                         binding.txtContact.getText().toString()));
-            } else if (operation.equals("getspecificdata")) {
-                binding.setData(db.daoAccess().getSpecificData(position + 1));
-            } else if (operation.equals("update")) {
-                db.daoAccess().updateNewDirectory(new DirectoryModel(position + 1, binding.txtName.getText().toString()
+            } else if (operation.equals("delete")) {
+                db.daoAccess().deleteDirectory(new DirectoryModel(selectData.get_id(), binding.txtName.getText().toString()
                         , binding.txtEmail.getText().toString(),
                         binding.txtContact.getText().toString()));
             }
 
-            return null;
+            return true;
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
+        protected void onPostExecute(Boolean aVoid) {
             super.onPostExecute(aVoid);
             //To after addition operation here.
 
-            if (operation.equals("save") || operation.equals("update")) {
-                clearFields();
-                new GetAllData(mContext).execute();
+            if (operation.equals("save") || operation.equals("update") || operation.equals("delete")) {
+                if (aVoid) {
+                    clearFields();
+                    flagRecord = true;
+                    new GetAllData(mContext).execute();
+                }
             } else if (operation.equals("getspecificdata")) {
                 flagRecord = false;
             }
@@ -207,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(ViewHolder holder, final int pos) {
-            DirectoryModel status = list.get(pos);
+            final DirectoryModel status = list.get(pos);
             holder.bindUser(status);
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -215,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     Toast.makeText(MainActivity.this, list.get(pos).getName(), Toast.LENGTH_SHORT).show();
 
-                    position = pos;
+                    email = status.getEmail();
 
                     new CrudOperation(MainActivity.this, "getspecificdata").execute();
                 }
@@ -243,4 +270,5 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
 }
