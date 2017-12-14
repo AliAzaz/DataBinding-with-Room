@@ -93,6 +93,13 @@ For more info regarding Room visit:
 * [Room](https://developer.android.com/training/data-storage/room/index.html) - Room Official documentation
 * [Android Pub](https://android.jlelse.eu/room-store-your-data-c6d49b4d53a3) - Descriptive intro of room
 
+### Working
+It's a simple CRUD operation implement with Data Binding and Room. When inserting data it'll show in the list. If you want to update or delete any data, simply click on record that's populated in list, it'll fill the fields then you can perform update and delete operation.
+
+<img src="ScreenShots/01.PNG" alt="Insert Data" width="50%" height="50%">
+<img src="ScreenShots/02.PNG" alt="Show data in list" width="50%" height="50%">
+<img src="ScreenShots/03.PNG" alt="Tap on list item" width="50%" height="50%">
+
 ### Contributors
 
 Contributor: Ali Azaz Alam ali.azaz.alam@hotmail.com
