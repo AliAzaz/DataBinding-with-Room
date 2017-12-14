@@ -96,9 +96,9 @@ For more info regarding Room visit:
 ### Working
 It's a simple CRUD operation implement with Data Binding and Room. When inserting data it'll show in the list. If you want to update or delete any data, simply click on record that's populated in list, it'll fill the fields then you can perform update and delete operation.
 
-<img src="ScreenShots/01.png" alt="Insert Data" width="50%" height="50%">
-<img src="ScreenShots/02.png" alt="Show data in list" width="50%" height="50%">
-<img src="ScreenShots/03.png" alt="Tap on list item" width="50%" height="50%">
+<img src="ScreenShots/1.png" alt="Insert Data" width="50%" height="50%">
+<img src="ScreenShots/2.png" alt="Show data in list" width="50%" height="50%">
+<img src="ScreenShots/3.png" alt="Tap on list item" width="50%" height="50%">
 
 ### Contributors
 
