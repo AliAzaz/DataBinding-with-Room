@@ -55,7 +55,7 @@ For more info regarding data binding visit:
 ### ROOM (New approach to store data):
 
 While building any data storage application that can store data in db by using some medium i.e abstraction layer. This layer can be the SQLiteOpenHelper class or ContentProvider class.
-At Google I/0 2017 Room persistance library introduced, the new technique that can help to save data in SQLite database. Room provides enhanced security, easy access, easy to setup and quick to get started with new database. 
+At Google I/0 2017 Room persistance library introduced, the new technique that can help to save data in Local database. Room provides enhanced security, easy access, easy to setup and quick to get started with new database. 
 
 Three major components of Room:
 - Database
